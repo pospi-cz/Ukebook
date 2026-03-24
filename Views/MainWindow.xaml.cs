@@ -1,9 +1,9 @@
 using Microsoft.Web.WebView2.Wpf;
-using UkuleleSongbook.Models;
-using UkuleleSongbook.Services;
-using UkuleleSongbook.ViewModels;
+using UkuSongbook.Models;
+using UkuSongbook.Services;
+using UkuSongbook.ViewModels;
 
-namespace UkuleleSongbook.Views;
+namespace UkuSongbook.Views;
 
 public partial class MainWindow : Window
 {
