@@ -1,7 +1,7 @@
-using UkuleleSongbook.Models;
-using UkuleleSongbook.Services;
+using UkuSongbook.Models;
+using UkuSongbook.Services;
 
-namespace UkuleleSongbook.ViewModels;
+namespace UkuSongbook.ViewModels;
 
 public sealed class MainViewModel : INotifyPropertyChanged
 {

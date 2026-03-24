@@ -22,16 +22,16 @@ dotnet restore
 ## Spuštění
 
 ```bash
-cd UkuleleSongbook
+cd UkuSongbook
 dotnet run
 ```
 
-nebo otevřete `UkuleleSongbook.csproj` ve Visual Studiu a stiskněte F5.
+nebo otevřete `UkuSongbook.csproj` ve Visual Studiu a stiskněte F5.
 
 ## Architektura projektu
 
 ```
-UkuleleSongbook/
+UkuSongbook/
 ├── Models/
 │   └── Song.cs               # Datový model písně
 ├── ViewModels/
@@ -51,7 +51,7 @@ UkuleleSongbook/
 
 Písně jsou uloženy v:
 ```
-%APPDATA%\UkuleleSongbook\
+%APPDATA%\UkuSongbook\
 ├── songs_index.json          # Index všech písní (metadata)
 └── Songs\
     ├── {id}.cho              # ChordPro soubor každé písně

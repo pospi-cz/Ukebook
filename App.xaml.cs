@@ -1,6 +1,6 @@
-using UkuleleSongbook.Services;
+using UkuSongbook.Services;
 
-namespace UkuleleSongbook;
+namespace UkuSongbook;
 
 public partial class App : Application
 {
