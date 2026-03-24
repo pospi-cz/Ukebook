@@ -1,0 +1,94 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+    ════════════════════════════════════════════════════════════
+     DARK THEME — přesné hodnoty z WinUI 3 / Fluent Design
+    ════════════════════════════════════════════════════════════
+
+     Vrstvy pozadí (tmavé = tmavší jsou výše):
+       SolidBackgroundFillColorBase        #202020
+       SolidBackgroundFillColorSecondary   #1C1C1C
+       SolidBackgroundFillColorTertiary    #282828
+       SolidBackgroundFillColorQuarternary #2C2C2C
+
+     Texty:
+       TextFillColorPrimary                rgba(255,255,255,1.0) → #FFFFFF
+       TextFillColorSecondary              rgba(255,255,255,0.7) → #FFFFFFB3
+       TextFillColorDisabled               rgba(255,255,255,0.36)→ #FFFFFF5C
+
+     Accent (Win11 dark mode):
+       AccentDefault                       #60CDFF
+       AccentLight1                        #99E0FF
+       AccentDark1                         #4CB8EE
+
+     Ovládací prvky:
+       ControlFillColorDefault             rgba(255,255,255,0.0605) → #FFFFFF0F
+       ControlFillColorSecondary           rgba(255,255,255,0.0837) → #FFFFFF15
+       ControlStrokeColorDefault           rgba(255,255,255,0.0837) → #FFFFFF15
+       ControlStrokeColorSecondary         rgba(255,255,255,0.0326) → #FFFFFF08
+    -->
+
+    <!-- ── Hlavní pozadí ─────────────────────────────────────── -->
+    <SolidColorBrush x:Key="AppBackgroundBrush"        Color="#202020"/>
+    <SolidColorBrush x:Key="AppForegroundBrush"        Color="#FFFFFF"/>
+
+    <!-- ── Sidebar / NavigationView ─────────────────────────── -->
+    <SolidColorBrush x:Key="SidebarBrush"              Color="#2C2C2C"/>
+    <SolidColorBrush x:Key="SidebarHeaderBrush"        Color="#272727"/>
+    <SolidColorBrush x:Key="SidebarTextBrush"          Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="SidebarHoverBrush"         Color="White"/>
+    <SolidColorBrush x:Key="SidebarSelectedBrush"      Color="#60CDFF1A"/>
+    <SolidColorBrush x:Key="SidebarSelectedTextBrush"  Color="#60CDFF"/>
+    <SolidColorBrush x:Key="SidebarAccentBarBrush"     Color="#60CDFF"/>
+    <SolidColorBrush x:Key="SidebarInputBrush"         Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="SidebarSubtextBrush"       Color="#AAFFFF"/>
+    <SolidColorBrush x:Key="SidebarMutedBrush"         Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="SidebarSeparatorBrush"     Color="#FFFFFF"/>
+
+    <!-- ── Toolbar ───────────────────────────────────────────── -->
+    <SolidColorBrush x:Key="ToolbarBrush"              Color="#282828"/>
+    <SolidColorBrush x:Key="ToolbarBorderBrush"        Color="#BBFFFF"/>
+    <SolidColorBrush x:Key="ToolbarTextBrush"          Color="#EEFFFF"/>
+    <SolidColorBrush x:Key="ToolbarIconBrush"          Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="ToolbarPillBrush"          Color="#ABFFFF"/>
+
+    <!-- ── Status bar ────────────────────────────────────────── -->
+    <SolidColorBrush x:Key="StatusBarBrush"            Color="#1C1C1C"/>
+    <SolidColorBrush x:Key="StatusBarBorderBrush"      Color="#AAFFFF"/>
+    <SolidColorBrush x:Key="StatusBarTextBrush"        Color="#AAFFFF"/>
+    <SolidColorBrush x:Key="StatusBarMutedBrush"       Color="#AAFFFF"/>
+
+    <!-- ── Accent ────────────────────────────────────────────── -->
+    <SolidColorBrush x:Key="PrimaryBrush"              Color="#60CDFF"/>
+    <SolidColorBrush x:Key="PrimaryHoverBrush"         Color="#99E0FF"/>
+    <SolidColorBrush x:Key="PrimaryPressedBrush"       Color="#4CB8EE"/>
+    <SolidColorBrush x:Key="PrimaryForegroundBrush"    Color="#1A1A1A"/>
+    <SolidColorBrush x:Key="DangerBrush"               Color="#FF6B6B"/>
+    <SolidColorBrush x:Key="DangerHoverBrush"          Color="#FF8080"/>
+
+    <!-- ── Borders / Cards / Text ────────────────────────────── -->
+    <SolidColorBrush x:Key="SplitterBrush"             Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="BorderBrush"               Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="CardBrush"                 Color="#2C2C2C"/>
+    <SolidColorBrush x:Key="TextPrimaryBrush"          Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush"        Color="#AAFFFF"/>
+
+    <!-- ── Vstupní pole ─────────────────────────────────────── -->
+    <SolidColorBrush x:Key="InputBorderBrush"          Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="InputBorderFocusBrush"     Color="#60CDFF"/>
+    <SolidColorBrush x:Key="InputBgBrush"              Color="#FFFFFF"/>
+
+    <!-- ── Editor (vždy tmavý) ──────────────────────────────── -->
+    <SolidColorBrush x:Key="EditorBgBrush"             Color="#1E1E1E"/>
+    <SolidColorBrush x:Key="EditorFgBrush"             Color="#D4D4D4"/>
+    <SolidColorBrush x:Key="EditorHeaderBrush"         Color="#252526"/>
+    <SolidColorBrush x:Key="EditorHeaderTextBrush"     Color="#858585"/>
+
+    <!-- ── Menu ─────────────────────────────────────────────── -->
+    <SolidColorBrush x:Key="MenuBackgroundBrush"       Color="#2C2C2C"/>
+    <SolidColorBrush x:Key="MenuForegroundBrush"       Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="MenuItemHoverBrush"        Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="MenuBorderBrush"           Color="#FFFFFF"/>
+
+</ResourceDictionary>

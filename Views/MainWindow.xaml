@@ -1,0 +1,510 @@
+<Window x:Class="UkuleleSongbook.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        xmlns:vm="clr-namespace:UkuleleSongbook.ViewModels"
+        Title="Ukulele Zpěvník"
+        Width="1280" Height="780"
+        MinWidth="860" MinHeight="520"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI Variable Text, Segoe UI, sans-serif"
+        FontSize="13"
+        Background="{DynamicResource AppBackgroundBrush}"
+        Foreground="{DynamicResource AppForegroundBrush}">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>  <!-- Menu bar -->
+            <RowDefinition Height="*"/>     <!-- Content -->
+            <RowDefinition Height="Auto"/>  <!-- Status bar -->
+        </Grid.RowDefinitions>
+
+        <!-- ══════════════════════════════════════════════════════
+             MENU BAR — plochý Win11 / VS style
+        ══════════════════════════════════════════════════════ -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource MenuBackgroundBrush}"
+                BorderBrush="{DynamicResource MenuBorderBrush}"
+                BorderThickness="0,0,0,1">
+            <Menu Background="Transparent"
+                  Foreground="{DynamicResource MenuForegroundBrush}"
+                  Padding="6,2">
+                <Menu.ItemContainerStyle>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Foreground"  Value="{DynamicResource MenuForegroundBrush}"/>
+                        <Setter Property="Background"  Value="Transparent"/>
+                        <Setter Property="Padding"     Value="10,5"/>
+                        <Setter Property="FontSize"    Value="12"/>
+                        <Setter Property="FontFamily"  Value="Segoe UI Variable Text, Segoe UI"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter Property="Background"
+                                        Value="{DynamicResource MenuItemHoverBrush}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Menu.ItemContainerStyle>
+                <MenuItem Header="Soubor">
+                    <MenuItem Header="Nová píseň"     Command="{Binding NewSongCommand}"
+                              InputGestureText="Ctrl+N"/>
+                    <Separator/>
+                    <MenuItem Header="Obnovit"         Command="{Binding RefreshCommand}"
+                              InputGestureText="F5"/>
+                    <Separator/>
+                    <MenuItem Header="Konec"            Click="MenuExit_Click"
+                              InputGestureText="Alt+F4"/>
+                </MenuItem>
+                <MenuItem Header="Úpravy">
+                    <MenuItem Header="Upravit píseň"  Command="{Binding EditSongCommand}"
+                              InputGestureText="Ctrl+E"/>
+                    <MenuItem Header="Uložit"          Command="{Binding SaveSongCommand}"
+                              InputGestureText="Ctrl+S"/>
+                    <MenuItem Header="Zrušit úpravy"   Command="{Binding CancelEditCommand}"
+                              InputGestureText="Esc"/>
+                    <Separator/>
+                    <MenuItem Header="Odstranit píseň" Command="{Binding DeleteSongCommand}"/>
+                </MenuItem>
+                <MenuItem Header="Zobrazení">
+                    <MenuItem Header="Přepnout motiv"  Command="{Binding ToggleThemeCommand}"
+                              InputGestureText="Ctrl+T"/>
+                    <Separator/>
+                    <MenuItem Header="Zvětšit písmo"   Command="{Binding FontIncreaseCommand}"
+                              InputGestureText="Ctrl++"/>
+                    <MenuItem Header="Zmenšit písmo"   Command="{Binding FontDecreaseCommand}"
+                              InputGestureText="Ctrl+-"/>
+                </MenuItem>
+                <MenuItem Header="Nápověda">
+                    <MenuItem Header="ChordPro formát" Click="MenuChordProHelp_Click"/>
+                    <Separator/>
+                    <MenuItem Header="O aplikaci"       Click="MenuAbout_Click"/>
+                </MenuItem>
+            </Menu>
+        </Border>
+
+        <!-- ══════════════════════════════════════════════════════
+             HLAVNÍ OBSAH
+        ══════════════════════════════════════════════════════ -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260" MinWidth="180" MaxWidth="400"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ══ SIDEBAR (NavigationView-like) ══════════════════ -->
+            <Grid Grid.Column="0"
+                  Background="{DynamicResource SidebarBrush}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>  <!-- Header -->
+                    <RowDefinition Height="Auto"/>  <!-- Search -->
+                    <RowDefinition Height="Auto"/>  <!-- Genre -->
+                    <RowDefinition Height="*"/>     <!-- List -->
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <Border Grid.Row="0"
+                        Background="{DynamicResource SidebarHeaderBrush}"
+                        BorderBrush="{DynamicResource SidebarSeparatorBrush}"
+                        BorderThickness="0,0,0,1"
+                        Padding="16,12,8,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal"
+                                    VerticalAlignment="Center" Margin="0,0,4,0">
+                            <TextBlock Text="🎸" FontSize="16"
+                                       VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="Zpěvník"
+                                       Foreground="{DynamicResource SidebarTextBrush}"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- + New song button -->
+                        <Button Grid.Column="1"
+                                Style="{StaticResource IconButtonStyle}"
+                                Command="{Binding NewSongCommand}"
+                                ToolTip="Nová píseň (Ctrl+N)"
+                                Padding="8,6" Margin="0,0,2,0">
+                            <TextBlock Text="+"
+                                       FontSize="16" FontWeight="Light"
+                                       Foreground="{DynamicResource SidebarTextBrush}"
+                                       VerticalAlignment="Center"/>
+                        </Button>
+
+                        <!-- Theme toggle -->
+                        <Button Grid.Column="2"
+                                Style="{StaticResource IconButtonStyle}"
+                                Command="{Binding ToggleThemeCommand}"
+                                ToolTip="Přepnout motiv (Ctrl+T)"
+                                Padding="8,6">
+                            <TextBlock Text="◑" FontSize="14"
+                                       Foreground="{DynamicResource SidebarTextBrush}"
+                                       VerticalAlignment="Center"/>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- Search box -->
+                <Border Grid.Row="1" Padding="8,8,8,4">
+                    <Grid>
+                        <TextBox x:Name="SearchBox"
+                                 Style="{StaticResource SearchBoxStyle}"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                        <!-- Placeholder -->
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="12,0,0,0" VerticalAlignment="Center"
+                                    IsHitTestVisible="False">
+                            <TextBlock Text="🔍" FontSize="11"
+                                       Foreground="{DynamicResource SidebarMutedBrush}"
+                                       Margin="0,0,5,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SearchText}" Value="">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock Text="Hledat..." FontSize="12"
+                                       Foreground="{DynamicResource SidebarMutedBrush}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SearchText}" Value="">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Genre filter -->
+                <Border Grid.Row="2" Padding="8,0,8,6">
+                    <ComboBox Style="{StaticResource SidebarComboStyle}"
+                              ItemsSource="{Binding Genres}"
+                              SelectedItem="{Binding SelectedGenreFilter}"/>
+                </Border>
+
+                <!-- Počet písní -->
+                <ListBox Grid.Row="3"
+                         ItemsSource="{Binding FilteredSongs}"
+                         SelectedItem="{Binding SelectedSong}"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Padding="4,0,4,8"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ItemContainerStyle="{StaticResource SongListItemStyle}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,1">
+                                <!-- Název písně -->
+                                <TextBlock Text="{Binding Title}"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           TextTrimming="CharacterEllipsis"/>
+                                <!-- Interpret + tónina -->
+                                <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                    <TextBlock Text="{Binding Artist}"
+                                               FontSize="11"
+                                               Foreground="{DynamicResource SidebarSubtextBrush}"
+                                               TextTrimming="CharacterEllipsis"
+                                               MaxWidth="130"/>
+                                    <TextBlock Text=" · " FontSize="11"
+                                               Foreground="{DynamicResource SidebarMutedBrush}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Key}" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Key}"
+                                               FontSize="11"
+                                               Foreground="{DynamicResource SidebarMutedBrush}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+
+            <!-- Splitter — tenká 1px linka -->
+            <Rectangle Grid.Column="1"
+                       Width="1"
+                       Fill="{DynamicResource SplitterBrush}"/>
+
+            <!-- ══ PRAVÝ PANEL ════════════════════════════════════ -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>  <!-- Toolbar -->
+                    <RowDefinition Height="*"/>     <!-- Content -->
+                </Grid.RowDefinitions>
+
+                <!-- ── Toolbar ─────────────────────────────────── -->
+                <Border Grid.Row="0"
+                        Background="{DynamicResource ToolbarBrush}"
+                        BorderBrush="{DynamicResource ToolbarBorderBrush}"
+                        BorderThickness="0,0,0,1"
+                        Padding="10,5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- View mode toolbar -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding IsViewing,
+                                                 Converter={StaticResource BoolToVis}}">
+
+                            <!-- Upravit -->
+                            <Button Style="{StaticResource IconButtonStyle}"
+                                    Command="{Binding EditSongCommand}"
+                                    ToolTip="Upravit píseň (Ctrl+E)"
+                                    Padding="10,5">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="✎" FontSize="13" Margin="0,0,5,0"
+                                               Foreground="{DynamicResource ToolbarIconBrush}"/>
+                                    <TextBlock Text="Upravit" FontSize="12"
+                                               Foreground="{DynamicResource ToolbarTextBrush}"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Smazat -->
+                            <Button Style="{StaticResource IconButtonStyle}"
+                                    Command="{Binding DeleteSongCommand}"
+                                    ToolTip="Odstranit píseň" Padding="8,5" Margin="2,0,0,0">
+                                <TextBlock Text="🗑" FontSize="13"
+                                           Foreground="{DynamicResource DangerBrush}"/>
+                            </Button>
+
+                            <Separator Style="{StaticResource ToolbarSeparatorStyle}"/>
+
+                            <!-- Velikost písma -->
+                            <Button Style="{StaticResource IconButtonStyle}"
+                                    Command="{Binding FontDecreaseCommand}"
+                                    ToolTip="Zmenšit písmo" Padding="7,5">
+                                <TextBlock Text="A" FontSize="10"
+                                           Foreground="{DynamicResource ToolbarIconBrush}"/>
+                            </Button>
+                            <!-- Pill s hodnotou -->
+                            <Border Background="{DynamicResource ToolbarPillBrush}"
+                                    BorderBrush="{DynamicResource ToolbarBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="4" Padding="7,3" Margin="2,0">
+                                <TextBlock Text="{Binding FontSize, StringFormat='{}{0}px'}"
+                                           Foreground="{DynamicResource ToolbarTextBrush}"
+                                           FontSize="11" MinWidth="28" TextAlignment="Center"/>
+                            </Border>
+                            <Button Style="{StaticResource IconButtonStyle}"
+                                    Command="{Binding FontIncreaseCommand}"
+                                    ToolTip="Zvětšit písmo" Padding="7,5">
+                                <TextBlock Text="A" FontSize="15"
+                                           Foreground="{DynamicResource ToolbarIconBrush}"/>
+                            </Button>
+
+                            <Separator Style="{StaticResource ToolbarSeparatorStyle}"/>
+
+                            <!-- Transpozice -->
+                            <TextBlock Text="♭♯" FontSize="13"
+                                       Foreground="{DynamicResource ToolbarTextBrush}"
+                                       VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <Button Style="{StaticResource IconButtonStyle}"
+                                    Command="{Binding TransposeDownCommand}"
+                                    ToolTip="Transponovat dolů" Padding="7,5">
+                                <TextBlock Text="−" FontSize="14"
+                                           Foreground="{DynamicResource ToolbarIconBrush}"/>
+                            </Button>
+                            <Border Background="{DynamicResource ToolbarPillBrush}"
+                                    BorderBrush="{DynamicResource ToolbarBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="4" Padding="7,3" Margin="2,0">
+                                <TextBlock Text="{Binding Transpose,
+                                                  StringFormat='{}{0:+0;-0;0}'}"
+                                           Foreground="{DynamicResource ToolbarTextBrush}"
+                                           FontSize="11" MinWidth="22" TextAlignment="Center"/>
+                            </Border>
+                            <Button Style="{StaticResource IconButtonStyle}"
+                                    Command="{Binding TransposeUpCommand}"
+                                    ToolTip="Transponovat nahoru" Padding="7,5">
+                                <TextBlock Text="+" FontSize="14"
+                                           Foreground="{DynamicResource ToolbarIconBrush}"/>
+                            </Button>
+                            <Button Style="{StaticResource IconButtonStyle}"
+                                    Command="{Binding TransposeResetCommand}"
+                                    ToolTip="Reset" Padding="7,5">
+                                <TextBlock Text="↺" FontSize="13"
+                                           Foreground="{DynamicResource ToolbarIconBrush}"/>
+                            </Button>
+                        </StackPanel>
+
+                        <!-- Edit mode toolbar -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding IsEditing,
+                                                 Converter={StaticResource BoolToVis}}">
+                            <Button Content="Uložit"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Command="{Binding SaveSongCommand}"
+                                    ToolTip="Uložit (Ctrl+S)"
+                                    Margin="0,0,6,0"/>
+                            <Button Content="Zrušit"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Command="{Binding CancelEditCommand}"
+                                    ToolTip="Zrušit (Esc)"/>
+                            <Separator Style="{StaticResource ToolbarSeparatorStyle}"/>
+                            <TextBlock Text="ChordPro editor"
+                                       Foreground="{DynamicResource ToolbarTextBrush}"
+                                       FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Song info (vpravo) -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding HasSelectedSong,
+                                                 Converter={StaticResource BoolToVis}}">
+                            <TextBlock Text="{Binding SelectedSong.Title}"
+                                       Foreground="{DynamicResource TextPrimaryBrush}"
+                                       FontSize="13" FontWeight="SemiBold"
+                                       VerticalAlignment="Center"
+                                       MaxWidth="220" Margin="0,0,6,0"
+                                       TextTrimming="CharacterEllipsis"
+                                       Visibility="{Binding IsViewing,
+                                                    Converter={StaticResource BoolToVis}}"/>
+                            <TextBlock Text="{Binding SelectedSong.Artist}"
+                                       Foreground="{DynamicResource ToolbarTextBrush}"
+                                       FontSize="12" VerticalAlignment="Center"
+                                       MaxWidth="160" Margin="0,0,14,0"
+                                       TextTrimming="CharacterEllipsis"
+                                       Visibility="{Binding IsViewing,
+                                                    Converter={StaticResource BoolToVis}}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- ── Obsah ────────────────────────────────────── -->
+                <Grid Grid.Row="1">
+
+                    <!-- Song WebView (zobrazení) -->
+                    <wv2:WebView2 x:Name="SongWebView"
+                                  Visibility="{Binding IsViewing,
+                                               Converter={StaticResource BoolToVis}}"/>
+
+                    <!-- Editor + Náhled (edit mode) -->
+                    <Grid Visibility="{Binding IsEditing,
+                                       Converter={StaticResource BoolToVis}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="1"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Editor (levý panel) -->
+                        <Grid Grid.Column="0"
+                              Background="{DynamicResource EditorBgBrush}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0"
+                                    Background="{DynamicResource EditorHeaderBrush}"
+                                    Padding="14,5">
+                                <TextBlock Text="ChordPro"
+                                           Foreground="{DynamicResource EditorHeaderTextBrush}"
+                                           FontFamily="Cascadia Code, Consolas" FontSize="11"/>
+                            </Border>
+                            <TextBox Grid.Row="1"
+                                     x:Name="EditorTextBox"
+                                     Style="{StaticResource EditorStyle}"
+                                     Text="{Binding EditContent,
+                                            UpdateSourceTrigger=PropertyChanged}"
+                                     TextChanged="Editor_TextChanged"/>
+                        </Grid>
+
+                        <!-- Svislá linka -->
+                        <Rectangle Grid.Column="1"
+                                   Fill="{DynamicResource SplitterBrush}"/>
+
+                        <!-- Náhled (pravý panel) -->
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0"
+                                    Background="{DynamicResource EditorHeaderBrush}"
+                                    Padding="14,5">
+                                <TextBlock Text="Náhled"
+                                           Foreground="{DynamicResource EditorHeaderTextBrush}"
+                                           FontFamily="Cascadia Code, Consolas" FontSize="11"/>
+                            </Border>
+                            <wv2:WebView2 Grid.Row="1" x:Name="PreviewWebView"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- ══════════════════════════════════════════════════════
+             STATUS BAR
+        ══════════════════════════════════════════════════════ -->
+        <Border Grid.Row="2"
+                Background="{DynamicResource StatusBarBrush}"
+                BorderBrush="{DynamicResource StatusBarBorderBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="14,4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{Binding StatusMessage}"
+                           Foreground="{DynamicResource StatusBarTextBrush}"
+                           FontSize="11" VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Column="1"
+                           Foreground="{DynamicResource StatusBarTextBrush}"
+                           FontSize="11" VerticalAlignment="Center"
+                           Margin="0,0,20,0">
+                    <Run Text="Písní: "/>
+                    <Run Text="{Binding FilteredSongs.Count, Mode=OneWay}"
+                         FontWeight="SemiBold"/>
+                    <Run Text=" / "/>
+                    <Run Text="{Binding AllSongs.Count, Mode=OneWay}"/>
+                </TextBlock>
+
+                <TextBlock Grid.Column="2"
+                           Text="Ukulele Zpěvník v1.0"
+                           Foreground="{DynamicResource StatusBarMutedBrush}"
+                           FontSize="11" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
