@@ -1,6 +1,6 @@
-using UkuSongbook.Models;
+using Ukebook.Models;
 
-namespace UkuSongbook.Services;
+namespace Ukebook.Services;
 
 public sealed partial class ChordProParser
 {

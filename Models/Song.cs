@@ -1,4 +1,4 @@
-namespace UkuSongbook.Models;
+namespace Ukebook.Models;
 
 public sealed class Song
 {

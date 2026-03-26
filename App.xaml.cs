@@ -1,6 +1,6 @@
-using UkuSongbook.Services;
+using Ukebook.Services;
 
-namespace UkuSongbook;
+namespace Ukebook;
 
 public partial class App : Application
 {

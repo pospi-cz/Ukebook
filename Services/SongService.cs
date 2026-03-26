@@ -1,12 +1,12 @@
 using Newtonsoft.Json;
-using UkuSongbook.Models;
+using Ukebook.Models;
 
-namespace UkuSongbook.Services;
+namespace Ukebook.Services;
 
 public sealed class SongService
 {
     private static readonly string AppDataPath =
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "UkuSongbook");
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Ukebook");
     private static readonly string SongsPath = Path.Combine(AppDataPath, "Songs");
     private static readonly string IndexPath = Path.Combine(AppDataPath, "songs_index.json");
 

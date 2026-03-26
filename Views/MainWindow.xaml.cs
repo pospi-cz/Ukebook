@@ -1,9 +1,9 @@
 using Microsoft.Web.WebView2.Wpf;
-using UkuSongbook.Models;
-using UkuSongbook.Services;
-using UkuSongbook.ViewModels;
+using Ukebook.Models;
+using Ukebook.Services;
+using Ukebook.ViewModels;
 
-namespace UkuSongbook.Views;
+namespace Ukebook.Views;
 
 public partial class MainWindow : Window
 {

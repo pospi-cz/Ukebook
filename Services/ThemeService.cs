@@ -1,4 +1,4 @@
-namespace UkuSongbook.Services;
+namespace Ukebook.Services;
 
 public static class ThemeService
 {
