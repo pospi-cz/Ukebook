@@ -10,6 +10,10 @@ public sealed class SongService
     private static readonly string SongsPath = Path.Combine(AppDataPath, "Songs");
     private static readonly string IndexPath = Path.Combine(AppDataPath, "songs_index.json");
 
+    /// <summary>Obsah vzorových písní podle (Title, Artist) — oprava starých instalací bez .cho souborů.</summary>
+    private static readonly Lazy<Dictionary<(string Title, string Artist), string>> SampleChordByTitleArtist = new(() =>
+        CreateSampleSongs().ToDictionary(s => (s.Title, s.Artist), s => s.ChordProContent));
+
     public static void EnsureDataDirectory()
     {
         Directory.CreateDirectory(AppDataPath);
@@ -23,6 +27,8 @@ public sealed class SongService
         {
             var samples = CreateSampleSongs();
             PersistIndex(samples);
+            // Index ukládá ChordProContent prázdný — bez .cho souborů by po restartu zmizel text písně
+            WriteChordFilesToDisk(samples);
             return samples;
         }
         try
@@ -31,7 +37,14 @@ public sealed class SongService
             foreach (var song in songs)
             {
                 var path = Path.Combine(SongsPath, $"{song.Id}.cho");
-                if (File.Exists(path)) song.ChordProContent = File.ReadAllText(path);
+                if (File.Exists(path))
+                    song.ChordProContent = File.ReadAllText(path);
+                else if (string.IsNullOrWhiteSpace(song.ChordProContent)
+                         && SampleChordByTitleArtist.Value.TryGetValue((song.Title, song.Artist), out var restored))
+                {
+                    song.ChordProContent = restored;
+                    File.WriteAllText(path, restored);
+                }
             }
             return [.. songs.OrderBy(s => s.Artist).ThenBy(s => s.Title)];
         }
@@ -56,6 +69,12 @@ public sealed class SongService
         var songs = LoadAllSongs();
         songs.RemoveAll(s => s.Id == song.Id);
         PersistIndex(songs);
+    }
+
+    private static void WriteChordFilesToDisk(IEnumerable<Song> songs)
+    {
+        foreach (var song in songs)
+            File.WriteAllText(Path.Combine(SongsPath, $"{song.Id}.cho"), song.ChordProContent);
     }
 
     private static void PersistIndex(List<Song> songs)

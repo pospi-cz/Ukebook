@@ -105,4 +105,11 @@
     <SolidColorBrush x:Key="MenuItemHoverBrush"        Color="#00000009"/>
     <SolidColorBrush x:Key="MenuBorderBrush"           Color="#E0E0E0"/>
 
+    <!-- Výchozí šablona podmenu používá SystemColors — sjednocení s Menu*Brush -->
+    <SolidColorBrush x:Key="{x:Static SystemColors.MenuBrushKey}"           Color="#F3F3F3"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}"      Color="#1A1A1A"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.MenuHighlightBrushKey}" Color="#E8E8E8"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"  Color="#1A1A1A"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlLightBrushKey}"  Color="#D0D0D0"/>
+
 </ResourceDictionary>

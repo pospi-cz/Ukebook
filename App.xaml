@@ -9,6 +9,8 @@
                 <ResourceDictionary Source="Themes/LightTheme.xaml"/>
                 <!-- Styly tlačítek, listů atd. — používají DynamicResource -->
                 <ResourceDictionary Source="Themes/MainTheme.xaml"/>
+                <!-- Přepíše Aero2 šablony MenuItem (podmenu) — používá DynamicResource Menu*Brush -->
+                <ResourceDictionary Source="Themes/MenuItemAeroOverrides.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

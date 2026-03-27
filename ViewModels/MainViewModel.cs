@@ -34,7 +34,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
             _selectedSong = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(HasSelectedSong));
-            if (value is not null && !_isEditing) RenderSong();
+            // Včetně value == null → úvodní obrazovka; při null dříve RenderSong() neběžel → prázdné WebView
+            if (!_isEditing) RenderSong();
         }
     }
 
@@ -132,6 +133,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
         RefreshCommand        = new RelayCommand(_ => LoadSongs());
 
         LoadSongs();
+        // Bez výběru písně má být BuildWelcomeHtml(); jinak CurrentHtml zůstane "" a WebView je černé
+        RenderSong();
     }
 
     private void LoadSongs()
@@ -258,7 +261,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
         SelectedSong  = null;
         FilterSongs();
         UpdateGenreList();
-        CurrentHtml   = BuildWelcomeHtml();
         StatusMessage = $"Odstraněno: {name}";
     }
 

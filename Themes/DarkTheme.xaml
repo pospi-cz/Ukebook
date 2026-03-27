@@ -96,7 +96,14 @@
     <!-- ── Menu ─────────────────────────────────────────────── -->
     <SolidColorBrush x:Key="MenuBackgroundBrush"       Color="#2C2C2C"/>
     <SolidColorBrush x:Key="MenuForegroundBrush"       Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="MenuItemHoverBrush"        Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="MenuBorderBrush"           Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="MenuItemHoverBrush"        Color="#33FFFFFF"/>
+    <SolidColorBrush x:Key="MenuBorderBrush"           Color="#5C5C5C"/>
+
+    <!-- Výchozí šablona podmenu (Popup) používá SystemColors — jinak světlé systémové barvy -->
+    <SolidColorBrush x:Key="{x:Static SystemColors.MenuBrushKey}"           Color="#2C2C2C"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}"      Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.MenuHighlightBrushKey}" Color="#3D3D3D"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlLightBrushKey}"  Color="#5C5C5C"/>
 
 </ResourceDictionary>
