@@ -7,8 +7,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <AssemblyName>UkuSongbook</AssemblyName>
-    <RootNamespace>UkuSongbook</RootNamespace>
+    <AssemblyName>Ukebook</AssemblyName>
+    <RootNamespace>Ukebook</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
