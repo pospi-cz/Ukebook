@@ -53,13 +53,13 @@
                     </Style>
                 </Menu.ItemContainerStyle>
                 <MenuItem Header="Soubor">
-                    <MenuItem Header="Nová píseň"     Command="{Binding NewSongCommand}"
+                    <MenuItem Header="Nová píseň" Command="{Binding NewSongCommand}"
                               InputGestureText="Ctrl+N"/>
                     <Separator/>
-                    <MenuItem Header="Obnovit"         Command="{Binding RefreshCommand}"
+                    <MenuItem Header="Obnovit" Command="{Binding RefreshCommand}"
                               InputGestureText="F5"/>
                     <Separator/>
-                    <MenuItem Header="Konec"            Click="MenuExit_Click"
+                    <MenuItem Header="Konec" Click="MenuExit_Click"
                               InputGestureText="Alt+F4"/>
                 </MenuItem>
                 <MenuItem Header="Úpravy">
