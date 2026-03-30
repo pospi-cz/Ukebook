@@ -113,7 +113,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public ICommand FontDecreaseCommand  { get; }
     public ICommand TransposeUpCommand   { get; }
     public ICommand TransposeDownCommand { get; }
-    public ICommand TransposeResetCommand{ get; }
+    public ICommand ResetCommand{ get; }
     public ICommand ToggleThemeCommand   { get; }
     public ICommand RefreshCommand       { get; }
 
@@ -124,13 +124,13 @@ public sealed class MainViewModel : INotifyPropertyChanged
         SaveSongCommand       = new RelayCommand(_ => SaveSong(),   _ => IsEditing);
         CancelEditCommand     = new RelayCommand(_ => CancelEdit(), _ => IsEditing);
         DeleteSongCommand     = new RelayCommand(_ => DeleteSong(), _ => HasSelectedSong);
-        FontIncreaseCommand   = new RelayCommand(_ => FontSize++);
-        FontDecreaseCommand   = new RelayCommand(_ => FontSize--);
-        TransposeUpCommand    = new RelayCommand(_ => Transpose++);
-        TransposeDownCommand  = new RelayCommand(_ => Transpose--);
-        TransposeResetCommand = new RelayCommand(_ => Transpose = 0);
+        FontIncreaseCommand   = new RelayCommand(_ => FontSize++, _ => HasSelectedSong && !IsEditing);
+        FontDecreaseCommand   = new RelayCommand(_ => FontSize--, _ => HasSelectedSong && !IsEditing);
+        TransposeUpCommand    = new RelayCommand(_ => Transpose++, _ => HasSelectedSong && !IsEditing);
+        TransposeDownCommand  = new RelayCommand(_ => Transpose--, _ => HasSelectedSong && !IsEditing);
+        ResetCommand = new RelayCommand(_ => ResetView(), _ => HasSelectedSong && !IsEditing);  
         ToggleThemeCommand    = new RelayCommand(_ => { IsDarkTheme = !IsDarkTheme; ThemeToggleRequested?.Invoke(); });
-        RefreshCommand        = new RelayCommand(_ => LoadSongs());
+        RefreshCommand        = new RelayCommand(_ => LoadSongs(), _ => HasSelectedSong && !IsEditing);
 
         LoadSongs();
         // Bez výběru písně má být BuildWelcomeHtml(); jinak CurrentHtml zůstane "" a WebView je černé
@@ -144,6 +144,12 @@ public sealed class MainViewModel : INotifyPropertyChanged
         UpdateGenreList();
         FilterSongs();
         StatusMessage = $"Načteno {AllSongs.Count} písní";
+    }
+
+    private void ResetView()
+    {        
+        FontSize     = 16;
+        Transpose    = 0;
     }
 
     private void FilterSongs()

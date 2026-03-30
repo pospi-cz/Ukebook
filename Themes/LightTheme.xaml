@@ -93,11 +93,13 @@
     <SolidColorBrush x:Key="SearchBoxFocusBrush"      Color="#0067C0"/>
     <SolidColorBrush x:Key="SearchBoxSelectionBrush"   Color="#CCE8FF"/>
 
-    <!-- ── Editor (vždy tmavý) ──────────────────────────────── -->
-    <SolidColorBrush x:Key="EditorBgBrush"             Color="#1E1E1E"/>
-    <SolidColorBrush x:Key="EditorFgBrush"             Color="#D4D4D4"/>
-    <SolidColorBrush x:Key="EditorHeaderBrush"         Color="#252526"/>
-    <SolidColorBrush x:Key="EditorHeaderTextBrush"     Color="#858585"/>
+    <!-- ── Editor (light mode) ────────────────────────────── -->
+    <SolidColorBrush x:Key="EditorBgBrush"             Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="EditorFgBrush"             Color="#1A1A1A"/>
+    <SolidColorBrush x:Key="EditorHeaderBrush"         Color="#F3F3F3"/>
+    <SolidColorBrush x:Key="EditorHeaderTextBrush"     Color="#5D5D5D"/>
+    <SolidColorBrush x:Key="EditorCaretBrush"          Color="#1A1A1A"/>
+    <SolidColorBrush x:Key="EditorSelectionBrush"      Color="#CCE8FF"/>
 
     <!-- ── Menu ─────────────────────────────────────────────── -->
     <SolidColorBrush x:Key="MenuBackgroundBrush"       Color="#F3F3F3"/>
